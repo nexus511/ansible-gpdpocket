@@ -8,7 +8,18 @@
     insertafter: "{{ item.insertafter }}"
   with_items:
   - { line: '[multilib]', regexp: '^\[multilib\]', insertafter: '^#\[multilib\]' }
-  - { line: 'Include = /etc/pacman.d/mirrorlist', regexp: '^Include = /etc/pacman.d/mirrorlist', insertafter: '^\[multilib\]' }
+  - { line: 'Include = /etc/pacman.d/mirrorlist', regexp: 'Include = /etc/pacman.d/mirrorlist', insertafter: '^\[multilib\]' }
+  tags:
+  - boot
+
+- name: install multilib-devel
+  pacman:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    update_cache: yes
+  with_items:
+  - { name: 'base-devel', state: 'absent' }
+  - { name: 'multilib-devel', state: 'present' }
   tags:
   - boot
 
@@ -21,7 +32,6 @@
   - intel-ucode
   - kmod
   - libelf
-  - multilib-devel
   - openssl-1.0 
   - os-prober
   tags:
